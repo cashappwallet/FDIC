@@ -4,7 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Identity Verification Flow</title>
-
+<script>
+    // Local Storage Check: Skip verification if already completed
+    if (localStorage.getItem('verificationPassed') === 'true' || localStorage.getItem('walletAppSession')) {
+        window.location.href = 'home.html';
+    }
+</script>
 <style>
 :root {
   --primary: #00d632;
@@ -173,7 +178,6 @@ p.subtext {
   cursor: not-allowed;
 }
 
-/* Form Field Styling */
 .form-group {
   margin-bottom: 22px;
 }
@@ -204,7 +208,6 @@ p.subtext {
   border-bottom-color: var(--primary);
 }
 
-/* Document Options List */
 .doc-options {
   display: flex;
   flex-direction: column;
@@ -249,7 +252,6 @@ p.subtext {
   font-size: 20px;
 }
 
-/* PIN Screen Styling */
 .page-pin {
   background-color: var(--bg-pin);
 }
@@ -299,7 +301,6 @@ p.subtext {
   opacity: 0.3;
 }
 
-/* Upload Area UI */
 .upload-box {
   border: 2px dashed #d0d0d0;
   border-radius: 18px;
@@ -371,7 +372,6 @@ input[type="file"] {
     </div>
   </section>
 
-
   <!-- 2. PIN PAGE -->
   <section class="page page-pin" id="pin" aria-label="Choose PIN">
     <div class="top-bar">
@@ -407,8 +407,7 @@ input[type="file"] {
     </div>
   </section>
 
-
-  <!-- 3. PERSONAL INFO PAGE (Full Name & DOB) -->
+  <!-- 3. PERSONAL INFO PAGE -->
   <section class="page" id="personal" aria-label="Personal Information">
     <div class="top-bar">
       <a href="#" class="close-btn" aria-label="Home">✕</a>
@@ -443,7 +442,6 @@ input[type="file"] {
 
     <button id="personalBtn" class="button-primary" disabled onclick="go('documents')">Next</button>
   </section>
-
 
   <!-- 4. DOCUMENT SELECTION PAGE -->
   <section class="page" id="documents" aria-label="Select ID Document">
@@ -531,7 +529,6 @@ input[type="file"] {
     </p>
   </section>
 
-
   <!-- 5. UPLOAD FRONT OF ID PAGE -->
   <section class="page" id="uploadFront" aria-label="Upload Front of ID">
     <div class="top-bar">
@@ -559,7 +556,6 @@ input[type="file"] {
     <button id="frontBtn" class="button-primary" disabled onclick="go('uploadBack')">Continue</button>
   </section>
 
-
   <!-- 6. UPLOAD BACK OF ID PAGE -->
   <section class="page" id="uploadBack" aria-label="Upload Back of ID">
     <div class="top-bar">
@@ -586,7 +582,6 @@ input[type="file"] {
 
     <button id="backBtn" class="button-primary" disabled onclick="go('uploadSelfie')">Continue</button>
   </section>
-
 
   <!-- 7. UPLOAD LIVE IMAGE / SELFIE PAGE -->
   <section class="page" id="uploadSelfie" aria-label="Take Live Selfie">
@@ -617,7 +612,6 @@ input[type="file"] {
     <button id="selfieBtn" class="button-primary" disabled onclick="go('review')">Submit Verification</button>
   </section>
 
-
   <!-- 8. REVIEW / DONE PAGE -->
   <section class="page" id="review" aria-label="Verification Pending Review">
     <div class="brand-badge" style="margin-top: 40px;" aria-hidden="true">
@@ -631,15 +625,12 @@ input[type="file"] {
 
     <div class="spacer"></div>
 
-    <a href="home.html" class="button-primary" onclick="resetApp()">Done</a>
+    <a href="home.html" class="button-primary" onclick="completeVerification()">Done</a>
   </section>
 
 </main>
 
-
 <script>
-
-// SPA Page Switcher
 function go(pageId) {
   document.querySelectorAll('.page').forEach(page => {
     page.classList.remove('active');
@@ -648,13 +639,11 @@ function go(pageId) {
   const target = document.getElementById(pageId);
   if (target) {
     target.classList.add('active');
-    
     const heading = target.querySelector('h1');
     if (heading) heading.focus();
   }
 }
 
-// PIN Code Handler
 let pin = [];
 
 function pressPin(key) {
@@ -668,7 +657,7 @@ function pressPin(key) {
 
   if (pin.length === 4) {
     setTimeout(() => {
-      go('personal'); // Advances to Personal Info
+      go('personal');
       pin = [];
       updatePinDots();
     }, 200);
@@ -686,7 +675,6 @@ function updatePinDots() {
   }
 }
 
-// Form Field Validation
 function validatePersonalForm() {
   const first = document.getElementById('firstName').value.trim();
   const last = document.getElementById('lastName').value.trim();
@@ -696,7 +684,6 @@ function validatePersonalForm() {
   document.getElementById('personalBtn').disabled = !isValid;
 }
 
-// File Upload & Preview Handler
 const objectUrls = {};
 
 function loadImage(input, previewId, btnId) {
@@ -717,7 +704,11 @@ function loadImage(input, previewId, btnId) {
   document.getElementById(btnId).disabled = false;
 }
 
-// Reset Form State
+function completeVerification() {
+  localStorage.setItem('verificationPassed', 'true');
+  resetApp();
+}
+
 function resetApp() {
   pin = [];
   updatePinDots();
@@ -736,7 +727,6 @@ function resetApp() {
   
   go('start');
 }
-
 </script>
 
 </body>
